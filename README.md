@@ -70,6 +70,6 @@ len(projects)
 from pygipo.models import Dump
 
 latest_dump = Dump.objects.latest()
-projects = [rr.json for r in latest_dump.record_set.all()]
+projects = [r.json for r in latest_dump.record_set.all()]
 len(projects)
 ```
