@@ -1,3 +1,4 @@
+from functools import wraps
 from uuid import uuid4
 
 from django.contrib.postgres.fields import JSONField
@@ -48,3 +49,12 @@ class Record(models.Model):
         return '<Record {0}: {1}...>'.format(
             self.dt.strftime('%Y-%m-%d_%H-%M-%S'),
             str(self.json)[:self.NUM_HEAD_CHARS])
+
+
+def memoize(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        print('Calling decorated function')
+        return f(*args, **kwds)
+
+    return wrapper
