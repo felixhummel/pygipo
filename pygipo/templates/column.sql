@@ -1,1 +1,1 @@
-(json {{ operator }} '{{ key  }}') :: {{ type  }} AS {{ key  }}
+(json {{ operator }} '{{ name }}') :: {{ pg_type }} AS {{ name }}

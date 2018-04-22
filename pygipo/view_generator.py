@@ -19,14 +19,35 @@ class PG:
     STR = 'TEXT'
     BOOL = 'BOOLEAN'
     JSONB = 'JSONB'
-    DEFAULT = JSONB
 
 
-PG_TYPE_MAP = {
-    int: PG.INT,
-    str: PG.STR,
-    bool: PG.BOOL,
-}
+class ColDef:
+    """
+    Column definition inferred from a key/value pair in Python.
+    """
+    PG_TYPE_MAP = {
+        int: PG.INT,
+        str: PG.STR,
+        bool: PG.BOOL,
+    }
+
+    DEFAULT_TYPE = PG.JSONB
+
+    def __init__(self, key, value):
+        self.name = key
+        self.python_type = type(value)
+        self.pg_type = self.PG_TYPE_MAP.get(self.python_type, self.DEFAULT_TYPE)
+
+    def render(self):
+        operator = '->>'
+        if self.pg_type == ColDef.DEFAULT_TYPE:
+            operator = '->'
+        column_context = dict(
+            operator=operator,
+            name=self.name,
+            pg_type=self.pg_type
+        )
+        return render_to_string('column.sql', _mark_safe_dict_values(column_context))
 
 
 def _mark_safe_dict_values(d):
@@ -36,7 +57,7 @@ def _mark_safe_dict_values(d):
 
 
 class ViewGenerator:
-    VIEW_NAME = 'v_record'
+    BASE_VIEW = 'v_record'
     PREFIX = 'vg_'
 
     def __init__(self, entity_name, name=None):
@@ -56,23 +77,11 @@ class ViewGenerator:
             'v_record.json as _record_json'
         ]
         for key, value in self.entity.json.items():
-            pg_type = PG_TYPE_MAP.get(type(value), PG.DEFAULT)
-            operator = '->>'
-            if pg_type == PG.DEFAULT:
-                operator = '->'
-            column_context = dict(
-                operator=operator,
-                key=key,
-                type=pg_type
-            )
-            coldef = render_to_string(
-                'column.sql',
-                _mark_safe_dict_values(column_context)
-            )
-            cols.append(coldef)
+            col = ColDef(key, value)
+            cols.append(col.render())
         column_definition = '    ' + ',\n    '.join(cols)
         view_context = {
-            'view_name': self.VIEW_NAME,
+            'view_name': self.BASE_VIEW,
             'entity': self.entity_name,
             'column_definition': column_definition
         }
