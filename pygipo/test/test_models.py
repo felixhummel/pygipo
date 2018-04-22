@@ -1,9 +1,9 @@
-import unittest
+from django.test import TestCase
 
 from pygipo.models import Dump, Record
 
 
-class TestModels(unittest.TestCase):
+class TestModels(TestCase):
     """
     test shortcut methods
     """

@@ -48,13 +48,13 @@ Use `python-gitlab` to fetch JSON objects and
 
 ```python
 import gitlab
-from pygipo import memoize
+from pygipo.models import memoize
 
 gl = gitlab.Gitlab.from_config()
 
 @memoize(entity='project')
 def get_all_projects():
-    return gl.projects.list(all=True)
+    return [p.attributes for p in gl.projects.list(all=True)]
 
 # this takes a while
 projects = get_all_projects()
