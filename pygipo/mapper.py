@@ -5,7 +5,6 @@ import os
 import django
 from django.db import connection
 from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gl2pg.settings')
 django.setup()
@@ -47,13 +46,7 @@ class ColDef:
             name=self.name,
             pg_type=self.pg_type
         )
-        return render_to_string('column.sql', _mark_safe_dict_values(column_context))
-
-
-def _mark_safe_dict_values(d):
-    for k in d:
-        d[k] = mark_safe(d[k])
-    return d
+        return render_to_string('column.sql', column_context)
 
 
 class Mapper:
@@ -67,6 +60,7 @@ class Mapper:
             self.name = name
         else:
             self.name = f'{self.PREFIX}{entity_name}'
+        self.coldefs = [ColDef(key, value) for key, value in self.entity.json.items()]
 
     def select(self):
         cols = [
@@ -76,19 +70,16 @@ class Mapper:
             'v_record.parent_id AS _record_parent_id',
             'v_record.json as _record_json'
         ]
-        for key, value in self.entity.json.items():
-            col = ColDef(key, value)
-            cols.append(col.render())
+        cols.extend([
+            col.render() for col in self.coldefs
+        ])
         column_definition = '    ' + ',\n    '.join(cols)
         view_context = {
             'view_name': self.BASE_VIEW,
             'entity': self.entity_name,
             'column_definition': column_definition
         }
-        return render_to_string(
-            'select.sql',
-            _mark_safe_dict_values(view_context)
-        )
+        return render_to_string('select.sql', view_context)
 
     def view(self):
         return render_to_string('view.sql',

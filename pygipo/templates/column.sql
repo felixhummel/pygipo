@@ -1,1 +1,1 @@
-(json {{ operator }} '{{ name }}') :: {{ pg_type }} AS {{ name }}
+{% autoescape off %}(json {{ operator }} '{{ name }}') :: {{ pg_type }} AS {{ name }}{% endautoescape %}
