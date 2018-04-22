@@ -9,6 +9,39 @@ pointing to
 using
 [JSONB](https://www.postgresql.org/docs/current/static/datatype-json.html).
 
+# Prerequisites
+A Gitlab instance and `python-gitlab`
+[configuration](http://python-gitlab.readthedocs.io/en/stable/cli.html#configuration)
+for it, e.g.
+```
+cat <<'EOF' >> ~/.python-gitlab.cfg
+[global]
+default = git.example.org
+ssl_verify = true
+timeout = 15
+
+[git.example.org]
+url = https://git.example.org/
+private_token = xxxxxxxxxxxxxxxxxxxx
+api_version = 4
+EOF
+```
+
+Python 3.6 and requirements:
+```
+pip install -r requirements.txt
+```
+
+Postgres running on `localhost:15432`:
+```
+cat docker-compose.yml
+docker-compose up -d
+
+vi +'/^DATABASES' project/settings.py
+./manage.py dbshell
+```
+
+
 # Workflow
 Use `python-gitlab` to fetch JSON objects and
 [memoize](https://en.wikipedia.org/wiki/Memoization) them in Postgres.
