@@ -1,0 +1,93 @@
+[
+  {
+    "id": 3869641,
+    "description": "Experimental docker-based application to deploy simple applications to Kubernetes\\r\\n",
+    "name": "kubernetes-deploy",
+    "name_with_namespace": "Felix Hummel / kubernetes-deploy",
+    "path": "kubernetes-deploy",
+    "path_with_namespace": "felixhummel/kubernetes-deploy",
+    "created_at": "2017-08-07T13:04:37.001Z",
+    "default_branch": "master",
+    "tag_list": [],
+    "ssh_url_to_repo": "git@gitlab.com:felixhummel/kubernetes-deploy.git",
+    "http_url_to_repo": "https://gitlab.com/felixhummel/kubernetes-deploy.git",
+    "web_url": "https://gitlab.com/felixhummel/kubernetes-deploy",
+    "avatar_url": null,
+    "star_count": 0,
+    "forks_count": 0,
+    "last_activity_at": "2017-11-10T22:21:49.790Z",
+    "_links": {
+      "self": "https://gitlab.com/api/v4/projects/3869641",
+      "issues": "https://gitlab.com/api/v4/projects/3869641/issues",
+      "merge_requests": "https://gitlab.com/api/v4/projects/3869641/merge_requests",
+      "repo_branches": "https://gitlab.com/api/v4/projects/3869641/repository/branches",
+      "labels": "https://gitlab.com/api/v4/projects/3869641/labels",
+      "events": "https://gitlab.com/api/v4/projects/3869641/events",
+      "members": "https://gitlab.com/api/v4/projects/3869641/members"
+    },
+    "archived": false,
+    "visibility": "public",
+    "owner": {
+      "id": 1214329,
+      "name": "Felix Hummel",
+      "username": "felixhummel",
+      "state": "active",
+      "avatar_url": "https://secure.gravatar.com/avatar/f948d3c1e257b379640e2ef1ddbc8723?s=80&d=identicon",
+      "web_url": "https://gitlab.com/felixhummel"
+    },
+    "resolve_outdated_diff_discussions": null,
+    "container_registry_enabled": true,
+    "issues_enabled": true,
+    "merge_requests_enabled": true,
+    "wiki_enabled": true,
+    "jobs_enabled": true,
+    "snippets_enabled": true,
+    "shared_runners_enabled": true,
+    "lfs_enabled": true,
+    "creator_id": 1214329,
+    "namespace": {
+      "id": 1450363,
+      "name": "felixhummel",
+      "path": "felixhummel",
+      "kind": "user",
+      "full_path": "felixhummel",
+      "parent_id": null
+    },
+    "forked_from_project": {
+      "id": 2323555,
+      "description": "Experimental docker-based application to deploy simple applications to Kubernetes\\r\\n",
+      "name": "kubernetes-deploy",
+      "name_with_namespace": "GitLab-examples / kubernetes-deploy",
+      "path": "kubernetes-deploy",
+      "path_with_namespace": "gitlab-examples/kubernetes-deploy",
+      "created_at": "2017-01-16T21:37:56.716Z",
+      "default_branch": "master",
+      "tag_list": [],
+      "ssh_url_to_repo": "git@gitlab.com:gitlab-examples/kubernetes-deploy.git",
+      "http_url_to_repo": "https://gitlab.com/gitlab-examples/kubernetes-deploy.git",
+      "web_url": "https://gitlab.com/gitlab-examples/kubernetes-deploy",
+      "avatar_url": null,
+      "star_count": 35,
+      "forks_count": 56,
+      "last_activity_at": "2018-04-14T02:46:01.886Z"
+    },
+    "import_status": "finished",
+    "open_issues_count": 3,
+    "public_jobs": true,
+    "ci_config_path": null,
+    "shared_with_groups": [],
+    "only_allow_merge_if_pipeline_succeeds": false,
+    "request_access_enabled": false,
+    "only_allow_merge_if_all_discussions_are_resolved": false,
+    "printing_merge_request_link_enabled": true,
+    "merge_method": "merge",
+    "permissions": {
+      "project_access": {
+        "access_level": 40,
+        "notification_level": 3
+      },
+      "group_access": null
+    },
+    "approvals_before_merge": 0
+  }
+]
