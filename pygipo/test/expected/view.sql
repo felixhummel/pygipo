@@ -1,5 +1,5 @@
-DROP VIEW IF EXISTS v_project;
-CREATE VIEW v_project AS
+DROP VIEW IF EXISTS vg_project;
+CREATE VIEW vg_project AS
 SELECT
     v_record.id AS _record_id,
     v_record._dump_id,

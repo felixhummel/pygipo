@@ -37,6 +37,7 @@ def _mark_safe_dict_values(d):
 
 class ViewGenerator:
     VIEW_NAME = 'v_record'
+    PREFIX = 'vg_'
 
     def __init__(self, entity_name, name=None):
         self.entity_name = entity_name
@@ -44,7 +45,7 @@ class ViewGenerator:
         if name is not None:
             self.name = name
         else:
-            self.name = f'v_{entity_name}'
+            self.name = f'{self.PREFIX}{entity_name}'
 
     def select(self):
         cols = [
