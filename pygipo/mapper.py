@@ -56,7 +56,7 @@ def _mark_safe_dict_values(d):
     return d
 
 
-class ViewGenerator:
+class Mapper:
     BASE_VIEW = 'v_record'
     PREFIX = 'vg_'
 
@@ -97,8 +97,3 @@ class ViewGenerator:
     def apply(self):
         with connection.cursor() as cursor:
             cursor.execute(self.view())
-
-
-if __name__ == '__main__':
-    vg = ViewGenerator('project')
-    print(vg.view(), end='')

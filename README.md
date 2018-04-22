@@ -42,7 +42,7 @@ vi +'/^DATABASES' project/settings.py
 ```
 
 
-# Workflow
+# Memoization
 Use `python-gitlab` to fetch JSON objects and
 [memoize](https://en.wikipedia.org/wiki/Memoization) them in Postgres.
 
@@ -73,3 +73,14 @@ latest_dump = Dump.objects.latest()
 projects = [r.json for r in latest_dump.record_set.all()]
 len(projects)
 ```
+
+
+# View and Model Generation
+Take `Records`s, make them views and generate some models for them:
+```
+./manage.py views  # make sure that we have `v_record`
+
+./manage.py genviews project
+./manage.py genmodel project > project.py
+```
+
