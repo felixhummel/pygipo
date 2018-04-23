@@ -9,6 +9,7 @@ pointing to
 using
 [JSONB](https://www.postgresql.org/docs/current/static/datatype-json.html).
 
+
 # Prerequisites
 A Gitlab instance and `python-gitlab`
 [configuration](http://python-gitlab.readthedocs.io/en/stable/cli.html#configuration)
@@ -38,13 +39,17 @@ cat docker-compose.yml
 docker-compose up -d
 
 vi +'/^DATABASES' project/settings.py
-./manage.py dbshell
+./manage.py migrate
 ```
 
 
 # Memoization
 Use `python-gitlab` to fetch JSON objects and
 [memoize](https://en.wikipedia.org/wiki/Memoization) them in Postgres.
+
+```
+./manage.py shell
+```
 
 ```python
 import gitlab
@@ -53,15 +58,15 @@ from pygipo.models import memoize
 gl = gitlab.Gitlab.from_config()
 
 @memoize(entity='project')
-def get_all_projects():
-    return [p.attributes for p in gl.projects.list(all=True)]
+def get_my_projects():
+    return [p.attributes for p in gl.projects.list(all=True, owned=True)]
 
 # this takes a while
-projects = get_all_projects()
+projects = get_my_projects()
 len(projects)
 
 # this is waaay faster
-projects = get_all_projects()
+projects = get_my_projects()
 len(projects)
 ```
 
@@ -90,5 +95,11 @@ p = Project.objects.first()
 print(p.id)
 print(p.name)
 EOF
+```
+
+
+# Cleanup
+```
+./bin/DANGER_clean_dev_env.sh
 ```
 
