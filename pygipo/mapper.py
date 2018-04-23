@@ -53,7 +53,7 @@ class ColDef:
             name=self.name,
             pg_type=self.pg_type
         )
-        return render_to_string('column.sql', column_context)
+        return render_to_string('column.sql.tmpl', column_context)
 
 
 class Mapper:
@@ -86,10 +86,10 @@ class Mapper:
             'entity': self.entity_name,
             'column_definition': column_definition
         }
-        return render_to_string('select.sql', view_context)
+        return render_to_string('select.sql.tmpl', view_context)
 
     def view(self):
-        return render_to_string('view.sql',
+        return render_to_string('view.sql.tmpl',
                                 dict(view=self.name, select=self.select()))
 
     def apply(self):
@@ -101,7 +101,7 @@ class Mapper:
         for col in self.coldefs:
             fields.append(f'{col.name} = {col.dj_type}()')
         field_definition = '\n    '.join(fields)
-        return render_to_string('model.py', dict(
+        return render_to_string('model.py.tmpl', dict(
             name=self.entity_name.capitalize(),
             field_definition=field_definition,
             table_name=self.name,
