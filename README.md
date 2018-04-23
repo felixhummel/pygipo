@@ -81,6 +81,14 @@ Take `Records`s, make them views and generate some models for them:
 ./manage.py views  # make sure that we have `v_record`
 
 ./manage.py genviews project
-./manage.py genmodel project > project.py
+./manage.py genmodels project > generated/project.py
+
+./manage.py shell <<EOF
+from generated.project import Project
+p = Project.objects.first()
+
+print(p.id)
+print(p.name)
+EOF
 ```
 
