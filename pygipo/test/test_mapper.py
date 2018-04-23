@@ -3,8 +3,9 @@ import os
 from django.test import TestCase
 
 from pygipo import models
-from pygipo.mapper import Mapper, ColDef
+from pygipo.mapper import Mapper, ColDef, Dump, Record
 from pygipo.migrations._utils import runviews
+from . import TestFile
 
 here = os.path.dirname(__file__)
 
@@ -49,3 +50,14 @@ class TestMapper(TestCase):
     def test_apply(self):
         vg = Mapper('project')
         vg.apply()
+
+    def test_model(self):
+        tf = TestFile('model.py')
+        d = Dump.create()
+        j = {'id': 1, 'name': 'foo', 'flag': True, 'x': {'something': 'completely different'}}
+        rec = Record(dump=d, entity='foo', json=j)
+        rec.save()
+        mapper = Mapper('foo')
+        model = mapper.model()
+        tf.write_actual(model)
+        self.assertEqual(model, tf.expected)

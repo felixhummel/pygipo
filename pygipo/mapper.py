@@ -29,13 +29,20 @@ class ColDef:
         str: PG.STR,
         bool: PG.BOOL,
     }
+    DJANGO_TYPE_MAP = {
+        int: 'models.IntegerField',
+        str: 'models.TextField',
+        bool: 'models.BooleanField'
+    }
 
     DEFAULT_TYPE = PG.JSONB
+    DJANGO_DEFAULT = 'django.contrib.postgres.fields.JSONField'
 
     def __init__(self, key, value):
         self.name = key
         self.python_type = type(value)
         self.pg_type = self.PG_TYPE_MAP.get(self.python_type, self.DEFAULT_TYPE)
+        self.dj_type = self.DJANGO_TYPE_MAP.get(self.python_type, self.DJANGO_DEFAULT)
 
     def render(self):
         operator = '->>'
@@ -88,3 +95,15 @@ class Mapper:
     def apply(self):
         with connection.cursor() as cursor:
             cursor.execute(self.view())
+
+    def model(self):
+        fields = []
+        for col in self.coldefs:
+            fields.append(f'{col.name} = {col.dj_type}()')
+        field_definition = '\n    '.join(fields)
+        return render_to_string('model.py', dict(
+            name=self.entity_name.capitalize(),
+            field_definition=field_definition,
+            table_name=self.name,
+            app_label='pypigo_generated'
+        ))
