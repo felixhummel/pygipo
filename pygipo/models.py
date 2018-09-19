@@ -27,7 +27,7 @@ class Dump(models.Model):
         record.save()
         return record
 
-    def add_multiple(self, entity, json_records, parent=None):
+    def addmany(self, entity, json_records, parent=None):
         assert isinstance(json_records, list), 'Please pass a list of things'
         return [self.add(entity, x, parent) for x in json_records]
 
@@ -56,6 +56,17 @@ class Record(models.Model):
         return '<Record {0}: {1}...>'.format(
             self.dt.strftime('%Y-%m-%d_%H-%M-%S'),
             str(self.json)[:self.NUM_HEAD_CHARS])
+
+    def __str__(self):
+        return f'{self.entity} id={self.id}'
+
+    @classmethod
+    def list_entities(cls):
+        """List all entity names"""
+        entities = cls.objects.all().distinct('entity').order_by(
+            'entity').values_list(
+            'entity', flat=True)
+        return list(entities)
 
 
 def memoize(entity, dump=None, unpack=True):
@@ -87,7 +98,7 @@ def memoize(entity, dump=None, unpack=True):
                 log.debug(f'appending to dump {d.uuid}')
                 result = f(*args, **kwargs)
                 if isinstance(result, list) and unpack:
-                    d.add_multiple(entity, result)
+                    d.addmany(entity, result)
                 else:
                     d.add(entity, result)
                 return result

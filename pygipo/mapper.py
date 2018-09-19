@@ -38,11 +38,16 @@ class ColDef:
     DEFAULT_TYPE = PG.JSONB
     DJANGO_DEFAULT = 'django.contrib.postgres.fields.JSONField'
 
-    def __init__(self, key, value):
+    def __init__(self, key, python_type):
         self.name = key
-        self.python_type = type(value)
+        self.python_type = python_type
         self.pg_type = self.PG_TYPE_MAP.get(self.python_type, self.DEFAULT_TYPE)
-        self.dj_type = self.DJANGO_TYPE_MAP.get(self.python_type, self.DJANGO_DEFAULT)
+        self.dj_type = self.DJANGO_TYPE_MAP.get(self.python_type,
+                                                self.DJANGO_DEFAULT)
+
+    @classmethod
+    def from_value(cls, key, value):
+        return cls(key, type(value))
 
     def render(self):
         operator = '->>'
@@ -62,12 +67,32 @@ class Mapper:
 
     def __init__(self, entity_name, name=None):
         self.entity_name = entity_name
-        self.entity = Record.objects.filter(entity=entity_name).first()
+        # find the keys
+        first_record = Record.objects.filter(entity=entity_name).first()
+        keys = first_record.json.keys()
+        # for each key: try to find a NOT NULL value
+        key2example_value = {}
+        for key in keys:
+            key2example_value[key] = None
+            recs = Record.objects.filter(entity=entity_name).all()
+            for rec in recs:
+                value = rec.json[key]
+                if value is not None:
+                    key2example_value[key] = value
+                    break
+        log.info(key2example_value)
+
         if name is not None:
             self.name = name
         else:
             self.name = f'{self.PREFIX}{entity_name}'
-        self.coldefs = [ColDef(key, value) for key, value in self.entity.json.items()]
+        self.coldefs = {key: ColDef.from_value(key, value) for key, value in
+                        key2example_value.items()}
+
+    def set_explicit_coldef_type(self, key, python_type):
+        if key not in self.coldefs:
+            raise Exception(f'Unknown key {key}')
+        self.coldefs[key] = ColDef(key, python_type)
 
     def select(self):
         cols = [
@@ -78,7 +103,7 @@ class Mapper:
             'v_record.json as _record_json'
         ]
         cols.extend([
-            col.render() for col in self.coldefs
+            col.render() for col in self.coldefs.values()
         ])
         column_definition = '    ' + ',\n    '.join(cols)
         view_context = {
@@ -98,7 +123,7 @@ class Mapper:
 
     def model(self):
         fields = []
-        for col in self.coldefs:
+        for col in self.coldefs.values():
             fields.append(f'{col.name} = {col.dj_type}()')
         field_definition = '\n    '.join(fields)
         return render_to_string('model.py.tmpl', dict(
