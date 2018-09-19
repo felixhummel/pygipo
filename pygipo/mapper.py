@@ -68,15 +68,17 @@ class Mapper:
     def __init__(self, entity_name, name=None):
         self.entity_name = entity_name
         # find the keys
-        first_record = Record.objects.filter(entity=entity_name).first()
-        keys = first_record.json.keys()
+        recs = Record.objects.filter(entity=entity_name).all()
+        # create example dict that contains **all keys** of all records
+        example_dict = {}
+        for rec in recs:
+            example_dict.update(rec.json)
         # for each key: try to find a NOT NULL value
         key2example_value = {}
-        for key in keys:
+        for key in example_dict.keys():
             key2example_value[key] = None
-            recs = Record.objects.filter(entity=entity_name).all()
             for rec in recs:
-                value = rec.json[key]
+                value = rec.json.get(key, None)
                 if value is not None:
                     key2example_value[key] = value
                     break

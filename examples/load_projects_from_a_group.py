@@ -36,7 +36,7 @@ for gl_project in gl_projects:
                 gl_project.users.list(all=True)]
     log.info(f'  users: {len(gl_users)}')
     for gl_user in gl_users:
-        user = dump.add('user', gl_user.attributes)
+        user = dump.add('user', gl_user.attributes, parent=project)
         project2user_record = {'project_id': gl_project.id,
                                'user_id': gl_user.id}
         dump.add('project2user', project2user_record)
