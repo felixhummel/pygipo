@@ -98,6 +98,14 @@ EOF
 ```
 
 
+# Run Examples
+```
+export DJANGO_SETTINGS_MODULE=project.settings
+export PYTHONPATH=.
+./examples/load_projects_from_a_group.py --help
+```
+
+
 # Cleanup
 ```
 ./bin/DANGER_clean_dev_env.sh

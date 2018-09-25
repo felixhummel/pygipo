@@ -9,6 +9,7 @@ setup(
         'psycopg2==2.7.3',
         'Django==2.0.4',
         'python-gitlab==1.3.0',
+        'click==6.7',
     ],
 )
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import logging
-import sys
 
+import click
 import django
 import gitlab
 
@@ -12,7 +12,21 @@ django.setup()
 from pygipo.models import Dump
 
 
-def main(group_name):
+@click.command()
+@click.option('--cache/--no-cache', default=False, show_default=True)
+@click.argument('group_name')
+def main(cache, group_name):
+    # note that this has to come before gitlab session instantiation
+    if cache:
+        try:
+            import requests
+            import requests_cache
+            requests_cache.install_cache()
+            log.warning('Using caching. Use this in development only!')
+        except ModuleNotFoundError:
+            log.error('requests_cache not found try: pip install requests-cache==0.4.13')
+            raise SystemExit
+
     dump = Dump.create()
     gl = gitlab.Gitlab.from_config()
 
@@ -46,4 +60,4 @@ def main(group_name):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main()
