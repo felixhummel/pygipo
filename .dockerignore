@@ -1,0 +1,12 @@
+# general
+.git
+Dockerfile
+docker-compose.*
+
+# python
+.idea
+**.egg-info
+**/__pycache__
+
+# specific
+cache.sqlite
