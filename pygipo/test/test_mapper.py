@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from pygipo import models
 from pygipo.mapper import Mapper, ColDef, Dump, Record
-from pygipo.migrations._utils import runviews
+from pygipo.utils import runviews
 from . import TestFile
 
 here = os.path.dirname(__file__)
