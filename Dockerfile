@@ -13,6 +13,8 @@ RUN chown -R app:app /opt/project
 WORKDIR /opt/project
 USER app
 
+ENV PYTHONPATH=.
+
 VOLUME ["/home/app"]
 
 ENTRYPOINT ["/opt/project/entrypoint.sh"]

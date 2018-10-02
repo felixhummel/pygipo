@@ -35,11 +35,24 @@ pip install -r requirements.txt
 
 Postgres running on `localhost:15432`:
 ```
-cat docker-compose.yml
+ln -s env/dev/docker-compose.override.yml
+cat docker-compose.override.yml
 docker-compose up -d
 
 vi +'/^DATABASES' project/settings.py
 ./manage.py migrate
+```
+
+
+# Run Examples
+```
+export DJANGO_SETTINGS_MODULE=project.settings
+export PYTHONPATH=.
+export DJANGO_DEBUG=true
+./examples/load_projects_from_a_group.py --help
+
+# get report for last week
+./examples/report_user_action_log.py $(date --date='last week' +%F) $(date --date='tomorrow' +%F)
 ```
 
 
@@ -95,14 +108,6 @@ p = Project.objects.first()
 print(p.id)
 print(p.name)
 EOF
-```
-
-
-# Run Examples
-```
-export DJANGO_SETTINGS_MODULE=project.settings
-export PYTHONPATH=.
-./examples/load_projects_from_a_group.py --help
 ```
 
 

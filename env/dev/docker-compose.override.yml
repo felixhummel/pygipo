@@ -1,9 +1,7 @@
-
 version: '3.5'
 
 services:
   app:
-    ports:
     user: ${COMPOSE_UID}:${COMPOSE_GID}
     command: ./manage.py runserver 0.0.0.0:8000
     environment:
@@ -13,3 +11,6 @@ services:
     ports:
       - 127.0.0.1:8000:8000
     stop_signal: SIGINT
+  postgres:
+    ports:
+      - 127.0.0.1:15432:5432

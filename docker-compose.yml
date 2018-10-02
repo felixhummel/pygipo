@@ -4,12 +4,15 @@ services:
   app:
     image: pygipo:build
     build: .
+    environment:
+      - DJANGO_SETTINGS_MODULE=project.settings
+      - DJANGO_SECRET_KEY
+      - PYTHONPATH=.
+      - DATABASE_URL=psql://postgres:secret@postgres/postgres
   postgres:
     image: postgres:10.3
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - 127.0.0.1:15432:5432
     restart: always
     environment:
       - POSTGRES_PASSWORD=secret
