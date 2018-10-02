@@ -7,8 +7,9 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=project.settings
       - DJANGO_SECRET_KEY
-      - PYTHONPATH=.
       - DATABASE_URL=psql://postgres:secret@postgres/postgres
+      - GITLAB_URL
+      - GITLAB_PRIVATE_TOKEN
   postgres:
     image: postgres:10.3
     volumes:

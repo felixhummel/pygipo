@@ -8,6 +8,7 @@ services:
       - DJANGO_DEBUG=true
     volumes:
       - ./:/opt/project
+      - ./env/dev/volumes/home:/home/app
     ports:
       - 127.0.0.1:8000:8000
     stop_signal: SIGINT
