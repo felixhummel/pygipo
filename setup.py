@@ -6,10 +6,10 @@ setup(
     packages=['pygipo'],
     include_package_data=True,
     install_requires=[
-        'psycopg2==2.7.3',
-        'Django==2.0.4',
-        'python-gitlab==1.3.0',
-        'click==6.7',
+        'psycopg2>=2.7',
+        'Django>=2.1',
+        'python-gitlab>=1.3',
+        'click>=7.0',
     ],
 )
 
